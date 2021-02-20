@@ -313,8 +313,8 @@ textures:
       - 1
       - 1
     axis:
-      - 0
-      - 0
+      - 32
+      - 32
     marginx: 0
     marginy: 0
     imgWidth: 64
@@ -324,23 +324,25 @@ textures:
     offx: 0
     offy: 0
     origname: i39dd482c-a025-4af4-9391-239ff6894aeb.png
-    shape: rect
-    left: 0
-    right: 64
-    top: 0
-    bottom: 64
+    shape: circle
+    left: 32
+    right: 32
+    top: 32
+    bottom: 32
     uid: 39dd482c-a025-4af4-9391-239ff6894aeb
     padding: 1
     source: >-
       C:\Users\Heloysa\Downloads\ct.js.v1.5.1.for.win64\win64\examples\Platformer_assets\Heart.png
+    r: 14
+    lastmod: 1613859854190
   - name: GreenCrystal
     untill: 0
     grid:
       - 1
       - 1
     axis:
-      - 0
-      - 0
+      - 32
+      - 32
     marginx: 0
     marginy: 0
     imgWidth: 64
@@ -350,15 +352,17 @@ textures:
     offx: 0
     offy: 0
     origname: ie7e8d22b-4c6d-482f-af83-bf973a4c309b.png
-    shape: rect
-    left: 0
-    right: 64
-    top: 0
-    bottom: 64
+    shape: circle
+    left: 32
+    right: 32
+    top: 32
+    bottom: 32
     uid: e7e8d22b-4c6d-482f-af83-bf973a4c309b
     padding: 1
     source: >-
       C:\Users\Heloysa\Downloads\ct.js.v1.5.1.for.win64\win64\examples\Platformer_assets\GreenCrystal.png
+    r: 14
+    lastmod: 1613859841999
   - name: Platform
     untill: 0
     grid:
@@ -415,7 +419,7 @@ skeletons: []
 types:
   - name: Robot
     depth: 0
-    oncreate: |+
+    oncreate: |
       this.jumpSpeed = -9;
       this.gravity = 0.5;
 
@@ -423,9 +427,7 @@ types:
       this.vspd = 0; // Vertical speed
 
       ct.camera.follow = this;
-
-
-    onstep: >+
+    onstep: >-
       this.speed = 4 * ct.delta //Velocidade horizontal maxima, olhe a doc do
       ct.delta
 
@@ -479,13 +481,21 @@ types:
           }
       }
 
+
+      if(ct.place.occupied(this, this.x, this.y, 'Deadly')){
+          this.x = this.savedX
+          this.x = this.savedY
+          this.hspd = 0
+          this.vspd = 0
+          return
+      }
     ondraw: ''
     ondestroy: ''
     texture: 70f64bd2-30f2-4fa2-a55d-479312ad9413
     extends:
       ctype: Robot
     uid: 3b982244-2d00-40a0-bd04-9b2013e7a5c2
-    lastmod: 1613775186370
+    lastmod: 1613860075884
   - name: Rocks_Top
     depth: 0
     oncreate: ''
@@ -519,6 +529,52 @@ types:
       ctype: Solid
     uid: 82f02fec-200b-4c91-9611-0ad6ad9f2164
     lastmod: 1613772358419
+  - name: Water
+    depth: 0
+    oncreate: ''
+    onstep: this.move();
+    ondraw: ''
+    ondestroy: ''
+    texture: 8539db31-63ba-42ce-90ca-fb3fb1726530
+    extends: {}
+    uid: 387f2d0c-de13-4bca-81d4-c2d90f1fc271
+    lastmod: 1613859904660
+  - name: Water_Top
+    depth: 0
+    oncreate: ''
+    onstep: this.move();
+    ondraw: ''
+    ondestroy: ''
+    texture: bb36f0f2-ef7f-4846-b0ee-9e857bea0b39
+    extends: {}
+    uid: 049fed63-0cf5-4708-96b1-309e1e1c5634
+    lastmod: 1613859910212
+  - name: Spikes
+    depth: 0
+    oncreate: this.ctype = 'Deadly'
+    onstep: this.move();
+    ondraw: ''
+    ondestroy: ''
+    texture: abeded0b-c413-40a8-9c37-ed8a5761c98e
+    extends: {}
+    uid: 3df3ca0e-6a72-4087-baab-780481f7d0df
+    lastmod: 1613860121548
+  - name: Checkpoint
+    depth: 0
+    oncreate: this.visible = false;
+    onstep: |-
+      var robot = ct.place.meet(this, this.x, this.y, 'Robot')
+
+      if(robot){
+          robot.savedX = this.x
+          robot.savedY = this.y + 10
+      }
+    ondraw: ''
+    ondestroy: ''
+    texture: fe13ec23-8e05-4e53-922d-1da2194a2468
+    extends: {}
+    uid: 03686199-e13d-4fcb-a4f1-c3e402979629
+    lastmod: 1613860089116
 sounds: []
 styles: []
 rooms:
@@ -851,15 +907,7 @@ rooms:
         'y': 256
         uid: 42d35080-ce1b-43b9-8d40-f086a6784e59
         exts: {}
-      - x: 256
-        'y': 384
-        uid: 82f02fec-200b-4c91-9611-0ad6ad9f2164
-        exts: {}
       - x: 192
-        'y': 384
-        uid: 82f02fec-200b-4c91-9611-0ad6ad9f2164
-        exts: {}
-      - x: 320
         'y': 384
         uid: 82f02fec-200b-4c91-9611-0ad6ad9f2164
         exts: {}
@@ -1011,7 +1059,39 @@ rooms:
         'y': 0
         uid: 55fd75e5-2b7f-46d1-a5fd-81e143d914b3
         exts: {}
-      - x: 240
+      - x: 1024
+        'y': 512
+        uid: 387f2d0c-de13-4bca-81d4-c2d90f1fc271
+        exts: {}
+      - x: 1024
+        'y': 512
+        uid: 55fd75e5-2b7f-46d1-a5fd-81e143d914b3
+        exts: {}
+      - x: 1088
+        'y': 512
+        uid: 42d35080-ce1b-43b9-8d40-f086a6784e59
+        exts: {}
+      - x: 1024
+        'y': 512
+        uid: 42d35080-ce1b-43b9-8d40-f086a6784e59
+        exts: {}
+      - x: 704
+        'y': 448
+        uid: 3df3ca0e-6a72-4087-baab-780481f7d0df
+        exts: {}
+      - x: 256
+        'y': 384
+        uid: 82f02fec-200b-4c91-9611-0ad6ad9f2164
+        exts: {}
+      - x: 320
+        'y': 384
+        uid: 82f02fec-200b-4c91-9611-0ad6ad9f2164
+        exts: {}
+      - x: 192
+        'y': 320
+        uid: 03686199-e13d-4fcb-a4f1-c3e402979629
+        exts: {}
+      - x: 256
         'y': 384
         uid: 3b982244-2d00-40a0-bd04-9b2013e7a5c2
         exts: {}
@@ -1022,8 +1102,8 @@ rooms:
     uid: 915cff2d-eed1-4136-8788-f598d05f4820
     thumbnail: f598d05f4820
     extends: {}
-    gridX: 0
-    gridY: 0
+    gridX: 64
+    gridY: 64
     lastmod: 1613772785100
     backgroundColor: '#000000'
 actions:
